@@ -41,6 +41,12 @@ const generateCharacterFromText = async (textDescription) => {
       }
     );
 
+    // 🔹 Print raw AI response for debugging
+    console.log(
+      "🔍 RAW AI RESPONSE:",
+      response.data.choices[0].message.content
+    );
+
     // Extract the AI-generated character details from the response
     const content = response.data.choices[0].message.content;
 
@@ -63,36 +69,51 @@ const parseCharacterDetails = (content) => {
   try {
     let characterDetails = {};
 
-    // Extract each field from the response using Regular Expressions
-    const nameMatch = content.match(/name:\s*([^\n]+)/i); // Extracts "name: CharacterName"
-    const titleMatch = content.match(/title:\s*([^\n]+)/i); // Extracts "title: CharacterTitle"
-    const personalityMatch = content.match(/personality:\s*([^#]+)/i); // Extracts personality details
-    const greetingMatch = content.match(/greeting:\s*([^#]+)/i); // Extracts greeting text
-    const scenarioMatch = content.match(/scenario:\s*([^#]+)/i); // Extracts scenario description
-    const exampleDialogueMatch = content.match(/exampleDialogue:\s*([^#]+)/i); // Extracts example dialogue
-    const avatarPromptMatch = content.match(/avatarPrompt:\s*([^#]+)/i); // Extracts avatar prompt
+    // Clean AI Response: Remove "**" artifacts & trim spaces
+    const cleanText = (text) => text.replace(/\*\*/g, "").trim();
 
-    // Assign extracted values to the character object, or use default values if missing
+    // Updated Regex to Capture Multi-line Responses Properly
+    const nameMatch = content.match(/\*\*Name:\*\*\s*([\s\S]+?)\n+\*\*Title:/i);
+    const titleMatch = content.match(
+      /\*\*Title:\*\*\s*([\s\S]+?)\n+\*\*Personality:/i
+    );
+    const personalityMatch = content.match(
+      /\*\*Personality:\*\*\s*([\s\S]+?)\n+\*\*Greeting:/i
+    );
+    const greetingMatch = content.match(
+      /\*\*Greeting:\*\*\s*([\s\S]+?)\n+\*\*Scenario:/i
+    );
+    const scenarioMatch = content.match(
+      /\*\*Scenario:\*\*\s*([\s\S]+?)\n+\*\*Example Dialogue:/i
+    );
+    const exampleDialogueMatch = content.match(
+      /\*\*Example Dialogue:\*\*\s*([\s\S]+?)\n+\*\*Avatar Prompt:/i
+    );
+    const avatarPromptMatch = content.match(
+      /\*\*Avatar Prompt:\*\*\s*([\s\S]+)/i
+    );
+
+    // Assign extracted values, or use default values if missing
     characterDetails.name = nameMatch
-      ? nameMatch[1].trim()
+      ? cleanText(nameMatch[1])
       : "Unknown Character";
     characterDetails.title = titleMatch
-      ? titleMatch[1].trim()
+      ? cleanText(titleMatch[1])
       : "Mysterious Being";
     characterDetails.personality = personalityMatch
-      ? personalityMatch[1].trim()
+      ? cleanText(personalityMatch[1])
       : "Mysterious and enigmatic.";
     characterDetails.greeting = greetingMatch
-      ? greetingMatch[1].trim()
+      ? cleanText(greetingMatch[1])
       : "Hello there!";
     characterDetails.scenario = scenarioMatch
-      ? scenarioMatch[1].trim()
+      ? cleanText(scenarioMatch[1])
       : "You encounter this character in an unknown place.";
     characterDetails.exampleDialogue = exampleDialogueMatch
-      ? exampleDialogueMatch[1].trim()
+      ? cleanText(exampleDialogueMatch[1])
       : "Character: Nice to meet you!";
     characterDetails.avatarPrompt = avatarPromptMatch
-      ? avatarPromptMatch[1].trim()
+      ? cleanText(avatarPromptMatch[1])
       : `Portrait of ${characterDetails.name}, ${characterDetails.title}`;
 
     return characterDetails;
