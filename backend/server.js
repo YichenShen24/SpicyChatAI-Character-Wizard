@@ -21,9 +21,9 @@ app.get("/", (req, res) => {
 });
 
 // Routes will be added here
-// app.use('/api/characters', require('./routes/characters'));
+app.use("/api/characters", require("./routes/characters"));
+app.use("/api/templates", require("./routes/templates"));
 // app.use('/api/users', require('./routes/users'));
-// app.use('/api/templates', require('./routes/templates'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {
