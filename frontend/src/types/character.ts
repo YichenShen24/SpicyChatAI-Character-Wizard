@@ -18,7 +18,7 @@ export interface CharacterCreationParams {
   templateId?: string;
 }
 
-export type CharacterCreationMethod = "text" | "url" | "template";
+export type CharacterCreationMethod = "text" | "url" | "template" | "options";
 
 export interface CharacterTemplate {
   id: string;

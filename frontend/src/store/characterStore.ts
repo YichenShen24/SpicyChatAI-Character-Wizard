@@ -39,7 +39,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
   currentCharacter: null,
   loading: false,
   error: null,
-  creationMethod: "text", // Default creation method
+  creationMethod: "options", // Default creation method
   creationParams: {},
 
   // Fetch all templates from the API
@@ -119,8 +119,10 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
   updateCharacter: async (id: string, updates: Partial<Character>) => {
     try {
       set({ loading: true, error: null });
+      console.log("updatedCharacter BEFORE");
+
       const updatedCharacter = await characterApi.updateCharacter(id, updates);
-      console.log("updatedCharacter", updatedCharacter);
+      console.log("updatedCharacter AFTER", updatedCharacter);
 
       set((state) => ({
         currentCharacter:
