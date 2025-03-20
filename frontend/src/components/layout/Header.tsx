@@ -38,7 +38,7 @@ export const Header = ({ toggleSidebar }: HeaderProps) => {
             theme === "dark" ? "text-white" : "text-gray-800"
           }`}
         >
-          Spicy Chat AI Character Wizard
+          SPICYCHAT.AI
         </h1>
       </div>
 

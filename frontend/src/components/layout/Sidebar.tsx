@@ -54,8 +54,8 @@ export const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
                 className={({ isActive }) => getNavLinkClasses(isActive)}
                 end
               >
-                <Users className="mr-3" size={20} />
-                <span>Characters</span>
+                <User className="mr-3" size={20} />
+                <span>Character Wizard</span>
               </NavLink>
             </li>
 
@@ -67,17 +67,6 @@ export const Sidebar = ({ isOpen, closeSidebar }: SidebarProps) => {
               >
                 <Users className="mr-3" size={20} />
                 <span>All Characters</span>
-              </NavLink>
-            </li>
-
-            {/* Profile Link */}
-            <li>
-              <NavLink
-                to="/profile"
-                className={({ isActive }) => getNavLinkClasses(isActive)}
-              >
-                <User className="mr-3" size={20} />
-                <span>Profile</span>
               </NavLink>
             </li>
           </ul>

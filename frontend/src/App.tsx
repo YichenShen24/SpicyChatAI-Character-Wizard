@@ -1,22 +1,23 @@
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { CharacterCreationPage } from "./pages/CharacterCreationPage";
+import { ThemeProvider } from "./components/layout/ThemeProvider";
+import { MainLayout } from "./components/layout/MainLayout";
+import { CharacterDetailPage } from "./pages/CharacterDetailPage";
+import { CharacterList } from "./components/characters/CharacterList";
 
 function App() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1 className="text-3xl font-bold underline">
-        SpicyChat AI Character Wizard!
-      </h1>
-    </>
+    <ThemeProvider>
+      <Router>
+        <MainLayout>
+          <Routes>
+            <Route path="/" element={<CharacterCreationPage />} />
+            <Route path="/character/:id" element={<CharacterDetailPage />} />
+            <Route path="/all" element={<CharacterList />} />
+          </Routes>
+        </MainLayout>
+      </Router>
+    </ThemeProvider>
   );
 }
 
