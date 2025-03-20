@@ -38,7 +38,7 @@ const generateAvatarImage = async (prompt) => {
     const images = await runware.requestImages(request);
 
     // Debug: Print full API response
-    console.log("✅ Runware API Response:", JSON.stringify(images, null, 2));
+    // console.log("✅ Runware API Response:", JSON.stringify(images, null, 2));
 
     if (!images || images.length === 0 || !images[0].imageURL) {
       throw new Error("❌ No image URL returned from Runware API.");
