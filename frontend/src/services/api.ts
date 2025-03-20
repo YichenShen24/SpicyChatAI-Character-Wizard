@@ -1,7 +1,15 @@
-import { Character } from "../types/character";
+import { Character, CharacterTemplate } from "../types/character";
 import { httpService } from "./http";
 
 export const characterApi = {
+  /**
+   * Fetches all characters templates from the backend.
+   * Returns an array of Character objects.
+   */
+  getTemplates: async (): Promise<CharacterTemplate[]> => {
+    const response = await httpService.get<CharacterTemplate[]>("/templates");
+    return response.data;
+  },
   /**
    * Fetches all characters from the backend.
    * Returns an array of Character objects.

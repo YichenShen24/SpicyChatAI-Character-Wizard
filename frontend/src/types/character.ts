@@ -18,4 +18,21 @@ export interface CharacterCreationParams {
   templateId?: string;
 }
 
-export type CharacterCreationMethod = 'text' | 'url' | 'template';
+export type CharacterCreationMethod = "text" | "url" | "template";
+
+export interface CharacterTemplate {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  image: string;
+  defaultPersonality: string;
+  defaultGreeting: string;
+  defaultScenario: string;
+  defaultExampleDialogue: string;
+  defaultAvatarPrompt: string;
+  popularity: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}

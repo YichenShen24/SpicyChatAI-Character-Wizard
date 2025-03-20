@@ -4,12 +4,14 @@ import {
   Character,
   CharacterCreationMethod,
   CharacterCreationParams,
+  CharacterTemplate,
 } from "../types/character"; // Importing types for better TypeScript support
 
 import { characterApi } from "../services/api"; // Importing API service for character-related requests
 
 // Define the structure of the character store
 interface CharacterState {
+  examples: CharacterTemplate[]; // List of characters templates
   characters: Character[]; // List of characters
   currentCharacter: Character | null; // Currently selected character
   loading: boolean; // Loading state for async operations
@@ -18,7 +20,7 @@ interface CharacterState {
   creationParams: CharacterCreationParams; // Parameters used for character creation
 
   // Functions for interacting with character data
-  fetchCharacters: () => Promise<void>; // Fetch all characters
+  fetchCharacters: () => Promise<void>;
   fetchCharacter: (id: string) => Promise<void>; // Fetch a single character by ID
   createCharacter: () => Promise<Character | null>; // Create a new character
   updateCharacter: (id: string, updates: Partial<Character>) => Promise<void>; // Update a character
@@ -27,16 +29,28 @@ interface CharacterState {
   setCreationMethod: (method: CharacterCreationMethod) => void; // Set how characters are created
   setCreationParams: (params: Partial<CharacterCreationParams>) => void; // Set parameters for character creation
   clearCurrentCharacter: () => void; // Clear selected character
+  fetchTemplates: () => Promise<void>; // Fetch all templates
 }
 
 // Create Zustand store for managing character state
 export const useCharacterStore = create<CharacterState>((set, get) => ({
   characters: [],
+  examples: [],
   currentCharacter: null,
   loading: false,
   error: null,
   creationMethod: "text", // Default creation method
   creationParams: {},
+
+  // Fetch all templates from the API
+  fetchTemplates: async () => {
+    try {
+      const templates = await characterApi.getTemplates();
+      set({ examples: templates });
+    } catch (error) {
+      console.error("Error fetching templates:", error);
+    }
+  },
 
   // Fetch all characters from the API
   fetchCharacters: async () => {
@@ -106,6 +120,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     try {
       set({ loading: true, error: null });
       const updatedCharacter = await characterApi.updateCharacter(id, updates);
+      console.log("updatedCharacter", updatedCharacter);
 
       set((state) => ({
         currentCharacter:
@@ -128,6 +143,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     try {
       set({ loading: true, error: null });
       const avatarUrl = await characterApi.generateAvatar(id, prompt);
+      console.log("Storeurl", avatarUrl);
 
       if (get().currentCharacter?.id === id) {
         set((state) => ({
