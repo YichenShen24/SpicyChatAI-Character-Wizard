@@ -27,6 +27,7 @@ const generateCharacterFromText = async (
           "A simple cartoon robot character with a friendly face, representing a development test placeholder",
       };
     }
+    // console.log("API RECeIVeD", textDescription);
 
     const response = await axios.post(
       "https://api.groq.com/openai/v1/chat/completions",
@@ -52,7 +53,17 @@ Then, in the exampleDialogue, write a natural back-and-forth between the user an
 
 Finally, provide an avatarPrompt: a description that could be used to generate an image of the character. Include physical features, clothing style, expression, pose, background, and overall aesthetic. Make sure it reflects the tone and personality established earlier.
 
-The goal is to present the character like they’re stepping out of a story—visually, emotionally, and narratively real.`,
+The goal is to present the character like they’re stepping out of a story—visually, emotionally, and narratively real.
+Required Output Format:
+**Name:** ...
+**Title:** ...
+**Personality:** ...
+**Greeting:** ...
+**Scenario:** ...
+**Example Dialogue:** ...
+**Avatar Prompt:** ...
+
+`,
           },
         ],
         temperature: 0.7,
@@ -81,6 +92,7 @@ The goal is to present the character like they’re stepping out of a story—vi
   }
 };
 export const parseCharacterDetails = (content: string): CharacterDetails => {
+  console.log("API GENERATED ", content);
   try {
     const cleanText = (text: string): string =>
       text.replace(/\*\*/g, "").trim();

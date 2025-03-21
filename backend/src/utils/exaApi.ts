@@ -75,6 +75,7 @@ const fetchContentFromUrl = async (url: string): Promise<UrlContent> => {
 const generateCharacterFromUrlContent = async (
   urlContent: UrlContent
 ): Promise<CharacterDetails> => {
+  // console.log("EXA CONTENT", urlContent);
   try {
     const textDescription = `
       Create a character based on this content:

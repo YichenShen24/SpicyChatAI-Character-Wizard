@@ -119,10 +119,10 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
   updateCharacter: async (id: string, updates: Partial<Character>) => {
     try {
       set({ loading: true, error: null });
-      console.log("updatedCharacter BEFORE");
+      //   console.log("updatedCharacter BEFORE");
 
       const updatedCharacter = await characterApi.updateCharacter(id, updates);
-      console.log("updatedCharacter AFTER", updatedCharacter);
+      //   console.log("updatedCharacter AFTER", updatedCharacter);
 
       set((state) => ({
         currentCharacter:

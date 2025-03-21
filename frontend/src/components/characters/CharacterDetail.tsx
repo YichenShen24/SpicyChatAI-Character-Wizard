@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { href, useParams } from "react-router-dom";
 import { Image, ChevronDown, ChevronUp } from "lucide-react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -108,12 +108,20 @@ export const CharacterDetail = () => {
       <div className="mb-6 flex justify-between items-center">
         <h2 className="text-2xl font-bold">Create Your Own Chatbot</h2>
         <a
-          href=""
+          href="https://your-guide-link.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-400 text-sm"
+          className="text-blue-400 text-sm sm:hidden block mt-2"
         >
-          Chatbot Creation Guide
+          Creation Guide
+        </a>
+        <a
+          href="https://your-guide-link.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-400 text-sm hidden sm:block"
+        >
+          Read Our Chatbot Creation Guide
         </a>
       </div>
 
