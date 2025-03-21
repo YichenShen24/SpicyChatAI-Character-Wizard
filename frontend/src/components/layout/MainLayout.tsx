@@ -13,7 +13,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
   const closeSidebar = () => setIsSidebarOpen(false);
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div className="flex flex-col min-h-dvh bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 pb-10">
       <Header toggleSidebar={toggleSidebar} />
 
       <div className="flex flex-1 overflow-hidden">
