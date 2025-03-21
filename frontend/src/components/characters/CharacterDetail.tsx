@@ -1,16 +1,6 @@
-import { useEffect, useState, ReactNode } from "react";
-import { href, useParams } from "react-router-dom";
-import {
-  Edit2,
-  User,
-  Sparkles,
-  MessageSquare,
-  Map,
-  MessagesSquare,
-  Image,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Image, ChevronDown, ChevronUp } from "lucide-react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
