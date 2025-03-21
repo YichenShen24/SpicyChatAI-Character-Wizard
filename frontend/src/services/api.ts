@@ -80,6 +80,7 @@ export const characterApi = {
       `/characters/${id}`,
       character
     );
+    console.log("update api", response);
     return response.data;
   },
 

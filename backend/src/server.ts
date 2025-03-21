@@ -7,7 +7,7 @@ import apiRoutes from "./routes/index";
 
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
-console.log("Environment variables loaded:");
+// console.log("Environment variables loaded:");
 // console.log({
 //   PORT: process.env.PORT,
 //   NODE_ENV: process.env.NODE_ENV,
