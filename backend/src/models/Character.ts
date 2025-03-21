@@ -1,6 +1,7 @@
-const mongoose = require("mongoose");
+import mongoose, { Schema } from "mongoose";
+import { CharacterDocument } from "../types";
 
-const characterSchema = new mongoose.Schema(
+const characterSchema = new Schema(
   {
     name: {
       type: String,
@@ -36,7 +37,6 @@ const characterSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-
     creationMethod: {
       type: String,
       enum: ["text", "url", "template"],
@@ -56,6 +56,9 @@ characterSchema.methods.toJSON = function () {
   return character;
 };
 
-const Character = mongoose.model("Character", characterSchema);
+const Character = mongoose.model<CharacterDocument>(
+  "Character",
+  characterSchema
+);
 
-module.exports = Character;
+export default Character;

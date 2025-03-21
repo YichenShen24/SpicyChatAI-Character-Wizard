@@ -1,56 +1,57 @@
-const Character = require("../models/Character");
-const CharacterTemplate = require("../models/CharacterTemplate");
-const mongoose = require("mongoose");
-const { generateCharacterFromText } = require("../utils/groqApi");
-const {
+import { Request, Response } from "express";
+import { Character, CharacterTemplate } from "../models/index";
+import mongoose from "mongoose";
+import { generateCharacterFromText } from "../utils/groqApi";
+import {
   fetchContentFromUrl,
   generateCharacterFromUrlContent,
-} = require("../utils/exaApi");
-const { generateAvatarImage } = require("../utils/runwareApi");
+} from "../utils/exaApi";
+import { generateAvatarImage } from "../utils/runwareApi";
 
-/**
- * Fetch all characters (No user authentication required)
- */
-const getAllCharacters = async (req, res) => {
+const getAllCharacters = async (req: Request, res: Response): Promise<void> => {
   try {
-    const characters = await Character.find(); // Fetch all characters
+    const characters = await Character.find();
     res.json(characters);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Server error", error: (error as Error).message });
   }
 };
 
-/**
- * Fetch a single character by ID
- */
-const getCharacterById = async (req, res) => {
+const getCharacterById = async (req: Request, res: Response): Promise<void> => {
   try {
-    const character = await Character.findById(req.params.id);
+    const character = await Character.findOne({
+      _id: req.params.id,
+    });
 
     if (!character) {
-      return res.status(404).json({ message: "Character not found" });
+      res.status(404).json({ message: "Character not found" });
+      return;
     }
 
     res.json(character);
   } catch (error) {
     if (error instanceof mongoose.Error.CastError) {
-      return res.status(400).json({ message: "Invalid character ID format" });
+      res.status(400).json({ message: "Invalid character ID format" });
+      return;
     }
-    res.status(500).json({ message: "Server error", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Server error", error: (error as Error).message });
   }
 };
 
-/**
- * Create a new AI-generated character from a text description
- */
-const createCharacterWithText = async (req, res) => {
+const createCharacterWithText = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const { textDescription } = req.body;
 
-    // Generate character details using AI (Groq API)
     const characterDetails = await generateCharacterFromText(textDescription);
 
-    // Save the new character to the database
     const character = new Character({
       name: characterDetails.name,
       title: characterDetails.title,
@@ -66,21 +67,21 @@ const createCharacterWithText = async (req, res) => {
 
     res.status(201).json(character);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Server error", error: (error as Error).message });
   }
 };
 
-/**
- * Create a new character by extracting details from a URL
- */
-const createCharacterWithUrl = async (req, res) => {
+const createCharacterWithUrl = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const { url } = req.body;
 
-    // Fetch website content using Exa API
     const urlContent = await fetchContentFromUrl(url);
 
-    // Generate AI character details from extracted content
     const characterDetails = await generateCharacterFromUrlContent(urlContent);
 
     const character = new Character({
@@ -98,25 +99,26 @@ const createCharacterWithUrl = async (req, res) => {
 
     res.status(201).json(character);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Server error", error: (error as Error).message });
   }
 };
 
-/**
- * Create a character from a predefined template
- */
-const createCharacterWithTemplate = async (req, res) => {
+const createCharacterWithTemplate = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const { templateId } = req.body;
 
-    // Find the template by ID
     const template = await CharacterTemplate.findById(templateId);
 
     if (!template) {
-      return res.status(404).json({ message: "Template not found" });
+      res.status(404).json({ message: "Template not found" });
+      return;
     }
 
-    // Create a new character based on the template
     const character = new Character({
       name: template.name,
       title: `Based on ${template.name} template`,
@@ -126,27 +128,27 @@ const createCharacterWithTemplate = async (req, res) => {
       exampleDialogue: template.defaultExampleDialogue,
       avatarPrompt: template.defaultAvatarPrompt,
       creationMethod: "template",
+      avatarUrl: template.image,
     });
 
     await character.save();
 
-    // Increase the popularity count of the template
     template.popularity += 1;
     await template.save();
 
     res.status(201).json(character);
   } catch (error) {
     if (error instanceof mongoose.Error.CastError) {
-      return res.status(400).json({ message: "Invalid template ID format" });
+      res.status(400).json({ message: "Invalid template ID format" });
+      return;
     }
-    res.status(500).json({ message: "Server error", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Server error", error: (error as Error).message });
   }
 };
 
-/**
- * Update character details
- */
-const updateCharacter = async (req, res) => {
+const updateCharacter = async (req: Request, res: Response): Promise<void> => {
   try {
     const {
       name,
@@ -158,13 +160,15 @@ const updateCharacter = async (req, res) => {
       avatarPrompt,
     } = req.body;
 
-    const character = await Character.findById(req.params.id);
+    const character = await Character.findOne({
+      _id: req.params.id,
+    });
 
     if (!character) {
-      return res.status(404).json({ message: "Character not found" });
+      res.status(404).json({ message: "Character not found" });
+      return;
     }
 
-    // Update character fields if they exist
     if (name) character.name = name;
     if (title) character.title = title;
     if (personality) character.personality = personality;
@@ -177,27 +181,31 @@ const updateCharacter = async (req, res) => {
 
     res.json(character);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    if (error instanceof mongoose.Error.CastError) {
+      res.status(400).json({ message: "Invalid character ID format" });
+      return;
+    }
+    res
+      .status(500)
+      .json({ message: "Server error", error: (error as Error).message });
   }
 };
 
-/**
- * Generate a new avatar using AI (Runware API)
- */
-const generateAvatar = async (req, res) => {
+const generateAvatar = async (req: Request, res: Response): Promise<void> => {
   try {
     const { prompt } = req.body;
 
-    const character = await Character.findById(req.params.id);
+    const character = await Character.findOne({
+      _id: req.params.id,
+    });
 
     if (!character) {
-      return res.status(404).json({ message: "Character not found" });
+      res.status(404).json({ message: "Character not found" });
+      return;
     }
 
-    // Generate avatar using Runware API
     const avatarUrl = await generateAvatarImage(prompt);
 
-    // Save the avatar URL to the character
     character.avatarPrompt = prompt;
     character.avatarUrl = avatarUrl;
 
@@ -205,28 +213,40 @@ const generateAvatar = async (req, res) => {
 
     res.json({ avatarUrl: character.avatarUrl });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    if (error instanceof mongoose.Error.CastError) {
+      res.status(400).json({ message: "Invalid character ID format" });
+      return;
+    }
+    res
+      .status(500)
+      .json({ message: "Server error", error: (error as Error).message });
   }
 };
 
-/**
- * Delete a character by ID
- */
-const deleteCharacter = async (req, res) => {
+const deleteCharacter = async (req: Request, res: Response): Promise<void> => {
   try {
-    const character = await Character.findByIdAndDelete(req.params.id);
+    const character = await Character.findOneAndDelete({
+      _id: req.params.id,
+    });
 
     if (!character) {
-      return res.status(404).json({ message: "Character not found" });
+      res.status(404).json({ message: "Character not found" });
+      return;
     }
 
     res.status(204).end();
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    if (error instanceof mongoose.Error.CastError) {
+      res.status(400).json({ message: "Invalid character ID format" });
+      return;
+    }
+    res
+      .status(500)
+      .json({ message: "Server error", error: (error as Error).message });
   }
 };
 
-module.exports = {
+export {
   getAllCharacters,
   getCharacterById,
   createCharacterWithText,

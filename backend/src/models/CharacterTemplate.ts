@@ -1,6 +1,7 @@
-const mongoose = require("mongoose");
+import mongoose, { Schema } from "mongoose";
+import { CharacterTemplateDocument } from "../types";
 
-const characterTemplateSchema = new mongoose.Schema(
+const characterTemplateSchema = new Schema(
   {
     name: {
       type: String,
@@ -54,7 +55,6 @@ const characterTemplateSchema = new mongoose.Schema(
   }
 );
 
-// Add methods to the schema if needed
 characterTemplateSchema.methods.toJSON = function () {
   const template = this.toObject();
   template.id = template._id.toString();
@@ -63,9 +63,9 @@ characterTemplateSchema.methods.toJSON = function () {
   return template;
 };
 
-const CharacterTemplate = mongoose.model(
+const CharacterTemplate = mongoose.model<CharacterTemplateDocument>(
   "CharacterTemplate",
   characterTemplateSchema
 );
 
-module.exports = CharacterTemplate;
+export default CharacterTemplate;
