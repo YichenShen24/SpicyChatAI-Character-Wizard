@@ -42,26 +42,26 @@ git clone https://github.com/yourusername/spicychat-character-wizard.git
 cd spicychat-character-wizard
 ```
 
-# === Backend Environment Variables ===
+## === Backend Environment Variables ===
 
-# Groq API key for character generation
+### Groq API key for character generation
 
 GROQ_API_KEY=your_groq_key_here
 
-# Exa API key for URL content crawling
+### Exa API key for URL content crawling
 
 EXA_API_KEY=your_exa_key_here
 
-# Runway API key for image generation
+### Runway API key for image generation
 
 RUNWAY_API_KEY=your_runway_key_here
 
-# MongoDB connection string
+### MongoDB connection string
 
 MONGO_URI=your_mongodb_uri_here
 
-# === Frontend Environment Variables ===
+## === Frontend Environment Variables ===
 
-# URL of your backend API
+### URL of your backend API
 
 VITE_API_URL=http://localhost:5000
