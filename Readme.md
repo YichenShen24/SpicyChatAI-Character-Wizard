@@ -6,7 +6,7 @@ Create compelling AI characters effortlessly with this full-stack character crea
 
 ## 🚀 Live Demo
 
-🌐 [SpicyChat Character Wizard]()
+🌐 Not Public For Now
 
 ---
 
