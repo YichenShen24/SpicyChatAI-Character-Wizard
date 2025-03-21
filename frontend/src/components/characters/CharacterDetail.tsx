@@ -8,6 +8,7 @@ import { Card } from "../ui/Card";
 import { Input } from "../ui/Input";
 import { TextArea } from "../ui/TextArea";
 import { Button } from "../ui/Button";
+import { useToast } from "../ui/Toast";
 import { useCharacterStore } from "../../store/characterStore";
 import { Character } from "../../types/character";
 import { useThemeStore } from "../../store/themeStore";
@@ -27,6 +28,7 @@ export const CharacterDetail = () => {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { theme } = useThemeStore();
+  const { showToast } = useToast();
 
   useEffect(() => {
     if (id) {
@@ -46,10 +48,39 @@ export const CharacterDetail = () => {
   };
 
   const handleSave = async (field: keyof Character) => {
-    if (id && character[field] !== undefined) {
-      await updateCharacter(id, { [field]: character[field] });
+    if (id) {
+      // Check if the field is empty or undefined
+      if (
+        !character[field] ||
+        (typeof character[field] === "string" &&
+          (character[field] as string).trim() === "")
+      ) {
+        showToast(
+          `${field.charAt(0).toUpperCase() + field.slice(1)} cannot be empty!`,
+          "error"
+        );
+        return;
+      }
+
+      try {
+        await updateCharacter(id, { [field]: character[field] });
+        showToast(
+          `${
+            field.charAt(0).toUpperCase() + field.slice(1)
+          } updated successfully!`,
+          "success"
+        );
+      } catch (error) {
+        showToast(
+          `Failed to update ${field}: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`,
+          "error"
+        );
+      }
     }
   };
+
   const handleGenerateAvatar = async () => {
     if (id && avatarPrompt) {
       setIsGeneratingAvatar(true);
@@ -57,6 +88,14 @@ export const CharacterDetail = () => {
         await generateAvatar(id, avatarPrompt);
         // Also update the avatarPrompt field
         await updateCharacter(id, { avatarPrompt });
+        showToast("Avatar generated successfully!", "success");
+      } catch (error) {
+        showToast(
+          `Failed to generate avatar: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`,
+          "error"
+        );
       } finally {
         setIsGeneratingAvatar(false);
       }
@@ -77,7 +116,7 @@ export const CharacterDetail = () => {
           rel="noopener noreferrer"
           className="text-blue-400 text-sm"
         >
-          Read our Chatbot Creation guide.
+          Chatbot Creation Guide
         </a>
       </div>
 
@@ -86,7 +125,7 @@ export const CharacterDetail = () => {
       <div className="space-y-6">
         {/* Name Field */}
         <div>
-          <label className="text-gray-400 text-sm">Name</label>
+          <label className="text-lg font-semibold">Name</label>
           <p className="text-xs text-gray-500 mb-2">
             The name can include first and last names.
           </p>
@@ -104,7 +143,7 @@ export const CharacterDetail = () => {
 
         {/* Title Field */}
         <div>
-          <label className="text-gray-400 text-sm">Title</label>
+          <label className="text-lg font-semibold">Title</label>
           <p className="text-xs text-gray-500 mb-2">
             Short sentence describing your chatbot, for display only.
           </p>
@@ -122,7 +161,7 @@ export const CharacterDetail = () => {
 
         {/* Greeting Field */}
         <div>
-          <label className="text-gray-400 text-sm">Greeting</label>
+          <label className="text-lg font-semibold">Greeting</label>
           <p className="text-xs text-gray-500 mb-2">
             What will they say to start a conversation?
           </p>

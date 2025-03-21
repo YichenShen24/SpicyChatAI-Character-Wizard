@@ -188,7 +188,7 @@ export const CharacterList = () => {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {characters.map((character: Character) => (
           <Card
             key={character.id}
@@ -199,7 +199,16 @@ export const CharacterList = () => {
             }`}
             onClick={() => handleEditCharacter(character.id)}
           >
-            <div className="flex items-start mb-3">
+            <div className="flex flex-col items-start mb-3">
+              {character.avatarUrl && (
+                <div className="w-full aspect-square mb-3 overflow-hidden flex items-center justify-center self-center">
+                  <img
+                    src={character.avatarUrl}
+                    alt={character.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
               <div className="flex-1">
                 <h3 className="text-lg font-semibold">{character.name}</h3>
                 <p
@@ -210,15 +219,6 @@ export const CharacterList = () => {
                   {character.title}
                 </p>
               </div>
-              {character.avatarUrl && (
-                <div className="w-12 h-12 rounded-full overflow-hidden">
-                  <img
-                    src={character.avatarUrl}
-                    alt={character.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
             </div>
 
             <p
