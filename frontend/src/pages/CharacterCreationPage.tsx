@@ -4,12 +4,15 @@ import { CharacterCreationSteps } from "../components/characters/CharacterCreati
 import { useCharacterStore } from "../store/characterStore";
 import { useThemeStore } from "../store/themeStore";
 import { CharacterCreationMethod } from "../types/character";
+import { useToast } from "../components/ui/Toast";
 
 type CreationStep = "options" | "text-input" | "url-input" | "examples";
 
 export const CharacterCreationPage = () => {
   const navigate = useNavigate();
   const { theme } = useThemeStore();
+  const { showToast } = useToast();
+
   const {
     examples,
     creationMethod: storeCreationMethod,
@@ -39,34 +42,64 @@ export const CharacterCreationPage = () => {
   const handleCreateWithText = async () => {
     if (!textDescription.trim()) return;
 
-    setCreationMethod("text");
-    setCreationParams({ textDescription });
-    const character = await createCharacter();
+    try {
+      setCreationMethod("text");
+      setCreationParams({ textDescription });
+      const character = await createCharacter();
 
-    if (character) {
-      navigate(`/character/${character.id}`);
+      if (character) {
+        showToast("Character created successfully!", "success");
+        navigate(`/character/${character.id}`);
+      }
+    } catch (error) {
+      showToast(
+        `Failed to create character: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
+        "error"
+      );
     }
   };
 
   const handleCreateWithUrl = async () => {
     if (!url.trim()) return;
 
-    setCreationMethod("url");
-    setCreationParams({ url });
-    const character = await createCharacter();
+    try {
+      setCreationMethod("url");
+      setCreationParams({ url });
+      const character = await createCharacter();
 
-    if (character) {
-      navigate(`/character/${character.id}`);
+      if (character) {
+        showToast("Character created successfully!", "success");
+        navigate(`/character/${character.id}`);
+      }
+    } catch (error) {
+      showToast(
+        `Failed to create character: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
+        "error"
+      );
     }
   };
 
   const handleSelectTemplate = async (templateId: string) => {
-    setCreationMethod("template");
-    setCreationParams({ templateId });
-    const character = await createCharacter();
+    try {
+      setCreationMethod("template");
+      setCreationParams({ templateId });
+      const character = await createCharacter();
 
-    if (character) {
-      navigate(`/character/${character.id}`);
+      if (character) {
+        showToast("Character created successfully!", "success");
+        navigate(`/character/${character.id}`);
+      }
+    } catch (error) {
+      showToast(
+        `Failed to create character: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
+        "error"
+      );
     }
   };
 
