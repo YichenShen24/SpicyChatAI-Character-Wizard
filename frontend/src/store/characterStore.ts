@@ -145,7 +145,6 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
     try {
       set({ loading: true, error: null });
       const avatarUrl = await characterApi.generateAvatar(id, prompt);
-      console.log("Storeurl", avatarUrl);
 
       if (get().currentCharacter?.id === id) {
         set((state) => ({
@@ -155,7 +154,6 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
           loading: false,
         }));
       }
-
       set((state) => ({
         characters: state.characters.map((char) =>
           char.id === id ? { ...char, avatarUrl } : char
@@ -163,8 +161,9 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
         loading: false,
       }));
     } catch (error) {
+      console.log("!----Character Store Error generating avatar:", error);
       set({ error: "Failed to generate avatar", loading: false });
-      console.error("Error generating avatar:", error);
+      throw error;
     }
   },
 

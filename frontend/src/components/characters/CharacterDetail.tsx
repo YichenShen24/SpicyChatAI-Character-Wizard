@@ -12,6 +12,7 @@ import { useToast } from "../ui/Toast";
 import { useCharacterStore } from "../../store/characterStore";
 import { Character } from "../../types/character";
 import { useThemeStore } from "../../store/themeStore";
+import { getErrorMessage } from "../../utils/errors";
 
 export const CharacterDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -90,12 +91,8 @@ export const CharacterDetail = () => {
         await updateCharacter(id, { avatarPrompt });
         showToast("Avatar generated successfully!", "success");
       } catch (error) {
-        showToast(
-          `Failed to generate avatar: ${
-            error instanceof Error ? error.message : "Unknown error"
-          }`,
-          "error"
-        );
+        console.log("detailpage - error", error);
+        showToast(` ${getErrorMessage(error)}`, "error");
       } finally {
         setIsGeneratingAvatar(false);
       }

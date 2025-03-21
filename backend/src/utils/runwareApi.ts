@@ -41,7 +41,22 @@ const generateAvatarImage = async (prompt: string): Promise<string> => {
     return images[0].imageURL;
   } catch (error) {
     console.error(" Error generating avatar image:", error);
-    throw new Error("Failed to generate avatar image.");
+
+    let errorMessage = "Unknown error";
+
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "error" in error &&
+      typeof (error as any).error === "object" &&
+      "message" in (error as any).error
+    ) {
+      errorMessage = (error as any).error.message;
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    throw new Error(`Failed to generate avatar image: ${errorMessage}`);
   }
 };
 

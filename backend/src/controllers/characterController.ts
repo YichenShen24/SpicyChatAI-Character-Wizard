@@ -213,6 +213,7 @@ const generateAvatar = async (req: Request, res: Response): Promise<void> => {
 
     res.json({ avatarUrl: character.avatarUrl });
   } catch (error) {
+    console.log("controller error", error);
     if (error instanceof mongoose.Error.CastError) {
       res.status(400).json({ message: "Invalid character ID format" });
       return;
