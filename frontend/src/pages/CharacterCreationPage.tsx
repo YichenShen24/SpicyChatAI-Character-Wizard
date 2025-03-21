@@ -113,7 +113,7 @@ export const CharacterCreationPage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto px-4 pb-10">
       <CharacterCreationSteps
         creationStep={creationStep}
         theme={theme}
