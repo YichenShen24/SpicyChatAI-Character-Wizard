@@ -64,4 +64,4 @@ MONGO_URI=your_mongodb_uri_here
 
 #### URL of your backend API
 
-VITE_API_URL=http://localhost:5000
+VITE_API_URL=your_backend_host_here
