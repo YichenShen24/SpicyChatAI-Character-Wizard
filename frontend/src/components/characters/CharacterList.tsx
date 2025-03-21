@@ -183,8 +183,8 @@ export const CharacterList = () => {
     <div className={`p-4 ${theme === "dark" ? "text-white" : "text-gray-800"}`}>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Your Characters</h2>
-        <Button onClick={() => navigate("/create")} variant="primary">
-          Create New Character
+        <Button onClick={() => navigate("/")} variant="primary">
+          Character Wizard
         </Button>
       </div>
 
