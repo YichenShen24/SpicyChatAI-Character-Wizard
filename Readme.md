@@ -41,6 +41,7 @@ Create compelling AI characters effortlessly with this full-stack character crea
 git clone https://github.com/yourusername/spicychat-character-wizard.git
 cd spicychat-character-wizard
 ```
+---
 
 ### === Backend Environment Variables ===
 
