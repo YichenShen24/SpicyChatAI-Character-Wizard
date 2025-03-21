@@ -1,5 +1,5 @@
 import { useEffect, useState, ReactNode } from "react";
-import { useParams } from "react-router-dom";
+import { href, useParams } from "react-router-dom";
 import {
   Edit2,
   User,
@@ -81,7 +81,12 @@ export const CharacterDetail = () => {
     >
       <div className="mb-6 flex justify-between items-center">
         <h2 className="text-2xl font-bold">Create Your Own Chatbot</h2>
-        <a href="#" className="text-blue-400 text-sm">
+        <a
+          href=""
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-400 text-sm"
+        >
           Read our Chatbot Creation guide.
         </a>
       </div>
